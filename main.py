@@ -1,7 +1,7 @@
 
 from tkinter import *
 
-from model import Field
+from model import Field, BadStep
 
 # root = Tk()
 # root.title('Calculator')
@@ -92,7 +92,11 @@ def get_text(player):
 
 
 def click(root, field, row, col):
-    field.make_step((row, col))
+    try:
+        field.make_step((row, col))
+    except BadStep:
+        print('Bad step is done, make another step.')
+
     print(field)
     draw(root, field)
     
