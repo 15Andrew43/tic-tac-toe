@@ -1,12 +1,11 @@
 from enum import Enum
 import numpy as np
 
-# class Player(Enum):
-#     tic = 1
-#     toc = -1
-#     nobody = 0
+
 
 class BadStep(Exception):
+    pass
+class WIN(Exception):
     pass
 
 
@@ -26,15 +25,13 @@ class Field:
         sum_right = 0
         for i in range(self.sizes):
             sum_left += self.field[i, i]
-            sum_right += self.field[self.sizes - i - 1, self.sizes - i - 1]
+            sum_right += self.field[i, self.sizes - i - 1]
         if sum_left * player == 3:
             return True, [(0, 0), (self.sizes, self.sizes)]
-        if sum_right * player == 3:
+        elif sum_right * player == 3:
             return True, [(0, self.sizes), (self.sizes, 0)]
         return False, []
     
-    def draw(self):
-        pass
     
     def make_step(self, step):
         y, x = step
@@ -44,15 +41,14 @@ class Field:
         
         is_win, where = self.check_win(self.player)
 
-        if is_win:
-            self.draw()
+        self.player *= 1 if is_win else -1
         
-        self.player *= -1
+        return is_win, self.player
+        
+        
     
     def __getitem__(self, key):
         return self.field[key]
 
     def __repr__(self):
         return str(self.field)
-
-        
